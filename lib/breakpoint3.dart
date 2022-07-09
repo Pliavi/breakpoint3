@@ -24,6 +24,18 @@ class Breakpoint {
     final mediaQuery = MediaQuery.of(context);
     final currentOrientation = mediaQuery.orientation;
     final currentScreenSize = mediaQuery.size;
+
+    return _calculateBreakpoint(
+      currentScreenSize,
+      currentOrientation,
+    );
+  }
+
+  static Breakpoint _calculateBreakpoint(
+    Size currentScreenSize, [
+    Orientation? currentOrientation,
+  ]) {
+    // TODO: calculate currentOrientation if necessary
     ScreenSizes currentBreakpoint = ScreenSizes.large;
     final double currentColumnSize;
 
@@ -43,8 +55,44 @@ class Breakpoint {
       currentBreakpoint.margin,
       currentBreakpoint.gutter,
       currentColumnSize,
-      currentOrientation,
+      currentOrientation!,
     );
+  }
+
+  /// Return the breakpoint from the given [BoxConstraints] of the Widget
+  /// conforming with the screen size.
+  factory Breakpoint.fromWidget(
+    BuildContext context,
+    BoxConstraints constraints,
+  ) {
+    final mediaQuery = MediaQuery.of(context);
+    final currentOrientation = mediaQuery.orientation;
+    final currentScreenSize = mediaQuery.size;
+    final currentWidgetSize = constraints.biggest;
+
+    final currentBreakpoint = _calculateBreakpoint(
+          currentScreenSize,
+          currentOrientation,
+        ) -
+        _calculateBreakpoint(
+          currentWidgetSize,
+          currentOrientation,
+        );
+
+    return currentBreakpoint!;
+  }
+
+  /// Returns the breakpoint from the given [BoxConstraints]
+  /// NOT based on the screen size.
+  ///
+  /// @warn this fully unrecommended! Use [Breakpoint.fromWidget] instead!!
+  /// Use this method only if you know what you are doing!!!
+  ///
+  /// It will calculate the breakpoint as the given constrainst is the screen
+  /// So it will break all the layout rules!
+  /// From here are only you and god, I will not be responsible for anything!
+  factory Breakpoint.dangerouslyFromConstraints(BoxConstraints constraints) {
+    return _calculateBreakpoint(constraints.biggest);
   }
 
   static Breakpoint of(BuildContext context) {
@@ -52,6 +100,10 @@ class Breakpoint {
         .dependOnInheritedWidgetOfExactType<BreakpointProvider>()!
         .breakpoint(context);
   }
+
+  Breakpoint? operator -(Breakpoint other) => null;
+}
+
 }
 
 enum ScreenSizes {
