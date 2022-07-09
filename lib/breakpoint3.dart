@@ -3,6 +3,8 @@ library breakpoint3;
 import 'package:breakpoint3/widgets/breakpoint_provider.dart';
 import 'package:flutter/material.dart';
 
+// TODO: Change name to BreakpointData
+// and probably BreakpntProvider to only Breakpoint
 class Breakpoint {
   final Size size;
   final int columns;
@@ -10,6 +12,7 @@ class Breakpoint {
   final double gutter;
   final double columnSize;
   final Orientation orientation;
+  final Map<String, BreakpointDefinition> breakpoints;
 
   const Breakpoint._(
     this.size,
@@ -18,6 +21,7 @@ class Breakpoint {
     this.gutter,
     this.columnSize,
     this.orientation,
+    this.breakpoints,
   );
 
   factory Breakpoint.fromScreen(BuildContext context) {
@@ -56,6 +60,8 @@ class Breakpoint {
       currentBreakpoint.gutter,
       currentColumnSize,
       currentOrientation!,
+      // TODO: use the breakpoint definitions from the config file
+      Map(),
     );
   }
 
@@ -104,6 +110,18 @@ class Breakpoint {
   Breakpoint? operator -(Breakpoint other) => null;
 }
 
+abstract class BreakpointDefinition {
+  final double maxWidth;
+  final int columns;
+  final double margin;
+  final double gutter;
+
+  BreakpointDefinition({
+    required this.maxWidth,
+    required this.columns,
+    required this.margin,
+    required this.gutter,
+  });
 }
 
 enum ScreenSizes {
