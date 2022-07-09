@@ -50,7 +50,7 @@ class Breakpoint {
   static Breakpoint of(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<BreakpointProvider>()!
-        .breakpoint;
+        .breakpoint(context);
   }
 }
 
