@@ -1,5 +1,6 @@
 library breakpoint3;
 
+import 'package:breakpoint3/widgets/breakpoint_provider.dart';
 import 'package:flutter/material.dart';
 
 class Breakpoint {
@@ -44,6 +45,12 @@ class Breakpoint {
       currentColumnSize,
       currentOrientation,
     );
+  }
+
+  static Breakpoint of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<BreakpointProvider>()!
+        .breakpoint;
   }
 }
 
