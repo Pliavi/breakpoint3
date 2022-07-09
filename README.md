@@ -28,8 +28,38 @@ start using the package.
 TODO: Include short and useful examples for package users. Add longer examples
 to `/example` folder. 
 
+#### Create from context
 ```dart
-const like = 'sample';
+Widget build(BuildContext context) {
+    final breakpoint = Breakpoint.fromScreen(context);
+    
+    return Container(
+        color: Colors.red,
+        width: breakpoint.width,
+    );
+}
+```
+
+
+#### With provider
+```dart
+Widget build(BuildContext context) {
+    return BreakpointProvider(
+        child: Builder(
+            builder: (BuildContext context) {
+                final breakpoint = Breakpoint.of(context);
+
+                return Scaffold(
+                    body: Container(
+                        color: Colors.red,
+                        width: breakpoint.width,
+                    ),
+                );
+            },
+        ),
+    )
+}
+
 ```
 
 ## Additional information
